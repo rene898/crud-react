@@ -14,12 +14,12 @@ import {
 } from "reactstrap";
 
 const data = [
-  { id: 1, personaje: "Naruto", anime: "Naruto" },
-  { id: 2, personaje: "Goku", anime: "Dragon Ball" },
-  { id: 3, personaje: "Kenshin Himura", anime: "Rurouni Kenshin" },
-  { id: 4, personaje: "Monkey D. Luffy", anime: "One Piece" },
-  { id: 5, personaje: "Edward Elric", anime: "Fullmetal Alchemist: Brotherhood"},
-  { id: 6, personaje: "Seto Kaiba", anime: "Yu-Gi-Oh!" },
+  { id: 1, film: "Mission Impossible Dead Reckoning", genre: "Action" },
+  { id: 2, film: "Oppenheimer", genre: "Drama" },
+  { id: 3, film: "Midsommar", genre: "Horror" },
+  { id: 4, film: "Eternal Sunshine of Spotless Mind", genre: "Romance" },
+  { id: 5, film: "Knives Out", genre: "Suspense" },
+  { id: 6, film: "Back to the Future", genre: "Comedy" },
 ];
 
 class App extends React.Component {
@@ -29,8 +29,8 @@ class App extends React.Component {
     modalInsertar: false,
     form: {
       id: "",
-      personaje: "",
-      anime: "",
+      film: "",
+      genre: "",
     },
   };
 
@@ -40,7 +40,7 @@ class App extends React.Component {
       modalActualizar: true,
     });
   };
-
+  Seto;
   cerrarModalActualizar = () => {
     this.setState({ modalActualizar: false });
   };
@@ -60,8 +60,8 @@ class App extends React.Component {
     var arreglo = this.state.data;
     arreglo.map((registro) => {
       if (dato.id == registro.id) {
-        arreglo[contador].personaje = dato.personaje;
-        arreglo[contador].anime = dato.anime;
+        arreglo[contador].film = dato.film;
+        arreglo[contador].genre = dato.genre;
       }
       contador++;
     });
@@ -69,7 +69,9 @@ class App extends React.Component {
   };
 
   eliminar = (dato) => {
-    var opcion = window.confirm("Estás Seguro que deseas Eliminar el elemento "+dato.id);
+    var opcion = window.confirm(
+      "Estás Seguro que deseas Eliminar el elemento " + dato.id
+    );
     if (opcion == true) {
       var contador = 0;
       var arreglo = this.state.data;
@@ -83,13 +85,13 @@ class App extends React.Component {
     }
   };
 
-  insertar= ()=>{
-    var valorNuevo= {...this.state.form};
-    valorNuevo.id=this.state.data.length+1;
-    var lista= this.state.data;
+  insertar = () => {
+    var valorNuevo = { ...this.state.form };
+    valorNuevo.id = this.state.data.length + 1;
+    var lista = this.state.data;
     lista.push(valorNuevo);
     this.setState({ modalInsertar: false, data: lista });
-  }
+  };
 
   handleChange = (e) => {
     this.setState({
@@ -101,21 +103,22 @@ class App extends React.Component {
   };
 
   render() {
-    
     return (
       <>
         <Container>
-        <br />
-          <Button color="success" onClick={()=>this.mostrarModalInsertar()}>Crear</Button>
+          <br />
+          <Button color="success" onClick={() => this.mostrarModalInsertar()}>
+            Create
+          </Button>
           <br />
           <br />
           <Table>
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Personaje</th>
-                <th>Anime</th>
-                <th>Acción</th>
+                <th>film</th>
+                <th>genre</th>
+                <th>action</th>
               </tr>
             </thead>
 
@@ -123,16 +126,18 @@ class App extends React.Component {
               {this.state.data.map((dato) => (
                 <tr key={dato.id}>
                   <td>{dato.id}</td>
-                  <td>{dato.personaje}</td>
-                  <td>{dato.anime}</td>
+                  <td>{dato.film}</td>
+                  <td>{dato.genre}</td>
                   <td>
                     <Button
                       color="primary"
                       onClick={() => this.mostrarModalActualizar(dato)}
                     >
-                      Editar
+                      Edit
                     </Button>{" "}
-                    <Button color="danger" onClick={()=> this.eliminar(dato)}>Eliminar</Button>
+                    <Button color="danger" onClick={() => this.eliminar(dato)}>
+                      Delete
+                    </Button>
                   </td>
                 </tr>
               ))}
@@ -142,15 +147,15 @@ class App extends React.Component {
 
         <Modal isOpen={this.state.modalActualizar}>
           <ModalHeader>
-           <div><h3>Editar Registro</h3></div>
+            <div>
+              <h3>Edit Register</h3>
+            </div>
           </ModalHeader>
 
           <ModalBody>
             <FormGroup>
-              <label>
-               Id:
-              </label>
-            
+              <label>Id:</label>
+
               <input
                 className="form-control"
                 readOnly
@@ -158,30 +163,26 @@ class App extends React.Component {
                 value={this.state.form.id}
               />
             </FormGroup>
-            
+
             <FormGroup>
-              <label>
-                Personaje: 
-              </label>
+              <label>film:</label>
               <input
                 className="form-control"
-                name="personaje"
+                name="film"
                 type="text"
                 onChange={this.handleChange}
-                value={this.state.form.personaje}
+                value={this.state.form.film}
               />
             </FormGroup>
-            
+
             <FormGroup>
-              <label>
-                Anime: 
-              </label>
+              <label>genre:</label>
               <input
                 className="form-control"
-                name="anime"
+                name="genre"
                 type="text"
                 onChange={this.handleChange}
-                value={this.state.form.anime}
+                value={this.state.form.genre}
               />
             </FormGroup>
           </ModalBody>
@@ -191,57 +192,48 @@ class App extends React.Component {
               color="primary"
               onClick={() => this.editar(this.state.form)}
             >
-              Editar
+              Edit
             </Button>
-            <Button
-              color="danger"
-              onClick={() => this.cerrarModalActualizar()}
-            >
-              Cancelar
+            <Button color="danger" onClick={() => this.cerrarModalActualizar()}>
+              Cancel
             </Button>
           </ModalFooter>
         </Modal>
 
-
-
         <Modal isOpen={this.state.modalInsertar}>
           <ModalHeader>
-           <div><h3>Insertar Personaje</h3></div>
+            <div>
+              <h3>Insert film</h3>
+            </div>
           </ModalHeader>
 
           <ModalBody>
             <FormGroup>
-              <label>
-                Id: 
-              </label>
-              
+              <label>Id:</label>
+
               <input
                 className="form-control"
                 readOnly
                 type="text"
-                value={this.state.data.length+1}
+                value={this.state.data.length + 1}
               />
             </FormGroup>
-            
+
             <FormGroup>
-              <label>
-                Personaje: 
-              </label>
+              <label>film:</label>
               <input
                 className="form-control"
-                name="personaje"
+                name="film"
                 type="text"
                 onChange={this.handleChange}
               />
             </FormGroup>
-            
+
             <FormGroup>
-              <label>
-                Anime: 
-              </label>
+              <label>genre:</label>
               <input
                 className="form-control"
-                name="anime"
+                name="genre"
                 type="text"
                 onChange={this.handleChange}
               />
@@ -249,17 +241,14 @@ class App extends React.Component {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              color="primary"
-              onClick={() => this.insertar()}
-            >
-              Insertar
+            <Button color="primary" onClick={() => this.insertar()}>
+              Insert
             </Button>
             <Button
               className="btn btn-danger"
               onClick={() => this.cerrarModalInsertar()}
             >
-              Cancelar
+              Cancel
             </Button>
           </ModalFooter>
         </Modal>
